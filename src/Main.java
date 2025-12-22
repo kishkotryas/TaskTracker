@@ -18,6 +18,10 @@ class Main {
                     manager.displayAllTasks();
                     printMenu();
                     break;
+                case 3:
+                    manager.deleteTasks();
+                    printMenu();
+                    break;
                 case 4:
                     System.out.println("Выход из программы...");
                     break;
@@ -26,7 +30,6 @@ class Main {
                     printMenu();
             }
         }
-
     }
 
     private static void printMenu () {

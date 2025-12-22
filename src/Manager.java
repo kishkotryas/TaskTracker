@@ -24,16 +24,20 @@ public class Manager {
 
     protected void createTask () {
         int userInput;
+        String taskName;
+        String taskDescription;
+        String epicName;
+        String epicDescription;
 
-        System.out.println("Выберите тип добавляемой задачи: \n 1. Обычная задача \n 2. Эпик-задача");
+        System.out.println("Выберите тип добавляемой задачи: \n1. Обычная задача \n2. Эпик-задача");
         userInput = scanner.nextInt();
         scanner.nextLine();
         switch (userInput) {
             case 1:
                 System.out.println("Введите название задачи: ");
-                String taskName = scanner.nextLine();
+                taskName = scanner.nextLine();
                 System.out.println("Введите описание задачи: ");
-                String taskDescription = scanner.nextLine();
+                taskDescription = scanner.nextLine();
                 Task task = new Task(taskName, taskDescription);
                 if (tasks.containsKey(task.getId())) {
                     System.out.println("Такая задача уже есть!");
@@ -44,9 +48,9 @@ public class Manager {
                 break;
             case 2:
                 System.out.println("Введите название эпик-задачи: ");
-                String epicName = scanner.nextLine();
+                epicName = scanner.nextLine();
                 System.out.println("Введите описание эпик-задачи: ");
-                String epicDescription = scanner.nextLine();
+                epicDescription = scanner.nextLine();
                 Epic epic = new Epic(epicName, epicDescription);
                 if (epics.containsKey(epic.getId())) {
                     System.out.println("Такая эпик-задача уже есть!");
@@ -61,9 +65,11 @@ public class Manager {
     }
 
     public void displayAllTasks () {
+        int userInput;
+
         System.out.println("Выберите тип задач для отображения: ");
-        System.out.println("1. Обычные задачи, \n 2. Эпик-задачи, \n 3. Все задачи");
-        int userInput = scanner.nextInt();
+        System.out.println("1. Обычные задачи, \n2. Эпик-задачи, \n3. Все задачи");
+        userInput = scanner.nextInt();
         switch (userInput) {
             case 1:
                 displayOnlyTasks();
@@ -82,12 +88,14 @@ public class Manager {
     }
 
     public void displayOnlyTasks() {
+        int count;
+
         System.out.println(">> ОБЫЧНЫЕ ЗАДАЧИ...");
         if (!tasks.isEmpty()) {
-            int count = 1;
+            count = 1;
 
             for (Task task : tasks.values()) {
-                System.out.println(count + ". Название задачи: " + task.getName() + ", Описание задачи: "
+                System.out.println(count + ". Название задачи: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание задачи: "
                         + task.getDescription() + ", Статус задачи: " + task.getStatus());
                 ++count;
             }
@@ -97,17 +105,82 @@ public class Manager {
     }
 
     public void displayOnlyEpics () {
+        int count;
+
         System.out.println(">> ЭПИК-ЗАДАЧИ...");
         if (!epics.isEmpty()) {
-            int count = 1;
+            count = 1;
 
             for (Epic epic : epics.values()) {
-                System.out.println(count + ". Название эпик-задачи: " + epic.getName() + ", Описание эпик-задачи: "
+                System.out.println(count + ". Название эпик-задачи: " + epic.getName() + "(ID:" + epic.getId() + ")" + ", Описание эпик-задачи: "
                         + epic.getDescription() + ", Статус эпик-задачи: " + epic.getStatus());
                 ++count;
             }
         } else {
             System.out.println("Список эпик-задач пуст.");
+        }
+    }
+
+    public void deleteTasks () {
+        int id;
+        int userInput;
+
+        System.out.println("Выберите опцию для удаления:");
+        System.out.println("1. Удалить задачу, \n2. Удалить эпик-задачу, \n3. Удалить все задачи");
+        userInput = scanner.nextInt();
+        switch (userInput) {
+            case 1:
+                displayOnlyTasks();
+                if (tasks.isEmpty()) {
+                    break;
+                } else {
+                    System.out.println("Введите ID задачи:");
+                    id = scanner.nextInt();
+                    if (tasks.containsKey(id)) {
+                        System.out.println("Задача " + tasks.get(id).getName() + " успешно удалена!");
+                        tasks.remove(id);
+                    } else {
+                        System.out.println("Задачи с ID" + id + " не существует!");
+                    }
+                }
+                break;
+            case 2:
+                displayOnlyEpics();
+                if (epics.isEmpty()) {
+                    break;
+                } else {
+                    System.out.println("Введите ID эпик-задачи:");
+                    id = scanner.nextInt();
+                    if (epics.containsKey(id)) {
+                        System.out.println("Эпик-задача " + epics.get(id).getName() + " успешно удалена!");
+                        epics.remove(id);
+                    } else {
+                        System.out.println("Эпик-задачи с ID " + id + " не существует");
+                    }
+                }
+                break;
+            case 3:
+                System.out.println("Вы точно уверены что хотите удалить все задачи?");
+                System.out.println("1. ДА,\n2. НЕТ");
+                userInput = scanner.nextInt();
+                switch (userInput) {
+                    case 1:
+                        if (tasks.isEmpty() && epics.isEmpty()) {
+                            System.out.println("Список задач пуст, удаление невозможно.");
+                        } else {
+                            tasks.clear();
+                            epics.clear();
+                            System.out.println("Все задачи были успешно удалены.");
+                        }
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        System.out.println("Некорректный выбор опции.");
+                }
+                break;
+            default:
+                System.out.println("Некорректный выбор опции.");
         }
     }
 }
