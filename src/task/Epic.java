@@ -24,4 +24,25 @@ public class Epic extends Task {
     public int hashCode() {
         return Objects.hash(super.hashCode(), subtasks);
     }
+
+    public void addSubtaskToEpic (String name, String description) {
+        Subtask subtask = new Subtask(name, description);
+        if (subtasks.contains(subtask)) {
+            System.out.println("Такая подзадача в этом эпике уже есть!");
+        } else {
+            subtasks.add(subtask);
+            System.out.println("Подзадача " + name + " успешно добавлена в эпик " + getName());
+        }
+    }
+
+    public void displaySubtask () {
+        int count = 1;
+
+        for (int i = 0; i < subtasks.size(); i++) {
+            var element = subtasks.get(i);
+            System.out.println("    " + count + ". Подзадача " + element.getName() + "(ID:" + element.getId() + ")"
+                    + ", Описание: " + element.getDescription() + ", Статус: " + element.getStatus());
+            ++count;
+        }
+    }
 }

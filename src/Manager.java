@@ -39,7 +39,7 @@ public class Manager {
                 System.out.println("Введите описание задачи: ");
                 taskDescription = scanner.nextLine();
                 Task task = new Task(taskName, taskDescription);
-                if (tasks.containsKey(task.getId())) {
+                if (tasks.containsValue(task)) {
                     System.out.println("Такая задача уже есть!");
                 } else {
                     tasks.put(task.getId(), task);
@@ -52,7 +52,7 @@ public class Manager {
                 System.out.println("Введите описание эпик-задачи: ");
                 epicDescription = scanner.nextLine();
                 Epic epic = new Epic(epicName, epicDescription);
-                if (epics.containsKey(epic.getId())) {
+                if (epics.containsValue(epic)) {
                     System.out.println("Такая эпик-задача уже есть!");
                 } else {
                     epics.put(epic.getId(), epic);
@@ -62,6 +62,45 @@ public class Manager {
             default:
                 System.out.println("Некорректный тип задачи.");
         }
+    }
+    protected void createSubtask () {
+        int id;
+        int userInput = 0;
+        String subtaskName;
+        String subtaskDescription;
+        Epic epic;
+
+        displayOnlyEpics();
+        System.out.println("Введите ID эпик-задачи для добавления подзадачи:");
+        id = scanner.nextInt();
+        if (epics.containsKey(id)) {
+            subtaskCreateMenu();
+            while (userInput != 2) {
+                userInput = scanner.nextInt();
+                scanner.nextLine();
+                switch (userInput) {
+                    case 1:
+                        System.out.println("Введите название подзадачи:");
+                        subtaskName = scanner.nextLine();
+                        System.out.println("Введите описание подзадачи:");
+                        subtaskDescription = scanner.nextLine();
+                        epic = epics.get(id);
+                        epic.addSubtaskToEpic(subtaskName, subtaskDescription);
+                        subtaskCreateMenu();
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        System.out.println("Некорректный выбор опции из меню.");
+                }
+            }
+        } else {
+            System.out.println("Эпик-задачи с ID " + id + " не существует");
+        }
+    }
+    private static void subtaskCreateMenu () {
+        System.out.println("Выберите опцию из меню:");
+        System.out.println("1. Добавить подзадачу, \n2. Выход");
     }
 
     public void displayAllTasks () {
@@ -88,37 +127,36 @@ public class Manager {
     }
 
     public void displayOnlyTasks() {
-        int count;
+        int count = 1;
 
         System.out.println(">> ОБЫЧНЫЕ ЗАДАЧИ...");
         if (!tasks.isEmpty()) {
-            count = 1;
-
             for (Task task : tasks.values()) {
-                System.out.println(count + ". Название задачи: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание задачи: "
-                        + task.getDescription() + ", Статус задачи: " + task.getStatus());
+                System.out.println(count + ". Задача: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание: "
+                        + task.getDescription() + ", Статус: " + task.getStatus());
                 ++count;
             }
         } else {
             System.out.println("Список обычных задач пуст.");
         }
+        System.out.println();
     }
 
     public void displayOnlyEpics () {
-        int count;
+        int count = 1;
 
         System.out.println(">> ЭПИК-ЗАДАЧИ...");
         if (!epics.isEmpty()) {
-            count = 1;
-
             for (Epic epic : epics.values()) {
-                System.out.println(count + ". Название эпик-задачи: " + epic.getName() + "(ID:" + epic.getId() + ")" + ", Описание эпик-задачи: "
-                        + epic.getDescription() + ", Статус эпик-задачи: " + epic.getStatus());
+                System.out.println(count + ". Эпик-задача: " + epic.getName() + "(ID:" + epic.getId() + ")"
+                        + ", Описание: " + epic.getDescription() + ", Статус: " + epic.getStatus());
+                epic.displaySubtask();
                 ++count;
             }
         } else {
             System.out.println("Список эпик-задач пуст.");
         }
+        System.out.println();
     }
 
     public void deleteTasks () {
