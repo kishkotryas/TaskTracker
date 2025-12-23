@@ -7,7 +7,7 @@ class Main {
         int userInput = 0;
 
         printMenu();
-        while (userInput != 5) {
+        while (userInput != 6) {
             userInput = scanner.nextInt();
             switch (userInput) {
                 case 1:
@@ -23,10 +23,14 @@ class Main {
                     printMenu();
                     break;
                 case 4:
-                    manager.deleteTasks();
+                    manager.updateTask();
                     printMenu();
                     break;
                 case 5:
+                    manager.deleteTasks();
+                    printMenu();
+                    break;
+                case 6:
                     System.out.println("Выход из программы...");
                     break;
                 default:
@@ -37,7 +41,7 @@ class Main {
     }
 
     private static void printMenu () {
-        System.out.println("1. Создать новую задачу/эпик-задачу \n2. Создать подзадачу для эпик-задачи \n" +
-                "3. Посмотреть список задач \n4. Удалить задачу \n5. Выход из программы");
+        System.out.println("1. Создать новую задачу \n2. Создать подзадачу для эпик-задачи \n" +
+                "3. Посмотреть список задач \n4. Изменить статус задачи \n5. Удалить задачу  \n6. Выход из программы");
     }
 }

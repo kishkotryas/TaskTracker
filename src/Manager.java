@@ -1,4 +1,5 @@
 import task.Epic;
+import task.Subtask;
 import task.Task;
 
 import java.util.HashMap;
@@ -80,12 +81,17 @@ public class Manager {
                 scanner.nextLine();
                 switch (userInput) {
                     case 1:
-                        System.out.println("Введите название подзадачи:");
-                        subtaskName = scanner.nextLine();
-                        System.out.println("Введите описание подзадачи:");
-                        subtaskDescription = scanner.nextLine();
                         epic = epics.get(id);
-                        epic.addSubtaskToEpic(subtaskName, subtaskDescription);
+
+                        if (epic.getStatus().equals("DONE")) {
+                            System.out.println("Эпик-задача уже выполнена. Добавить новую подзадачу невозможно!");
+                        } else {
+                            System.out.println("Введите название подзадачи:");
+                            subtaskName = scanner.nextLine();
+                            System.out.println("Введите описание подзадачи:");
+                            subtaskDescription = scanner.nextLine();
+                            epic.addSubtaskToEpic(subtaskName, subtaskDescription);
+                        }
                         subtaskCreateMenu();
                         break;
                     case 2:
@@ -98,9 +104,88 @@ public class Manager {
             System.out.println("Эпик-задачи с ID " + id + " не существует");
         }
     }
-    private static void subtaskCreateMenu () {
-        System.out.println("Выберите опцию из меню:");
-        System.out.println("1. Добавить подзадачу, \n2. Выход");
+
+    public void updateTask () {
+        int userInput = 0;
+        int id;
+        Task task;
+        Epic epic;
+        Subtask subtask;
+
+        while (userInput != 2) {
+            displayOnlyTasks();
+            displayOnlyEpics();
+            taskUpdateMenu();
+
+            userInput = scanner.nextInt();
+            scanner.nextLine();
+            switch (userInput) {
+                case 1:
+                    System.out.println("Введите ID задачи для изменения статуса:");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
+                    if (tasks.containsKey(id)) {
+                        task = tasks.get(id);
+                        taskStatusMenu();
+                        userInput = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (userInput) {
+                            case 1:
+                                if (task.getStatus().equals("IN PROGRESS")) {
+                                    System.out.println("Эта задача уже выполняется!");
+                                } else if (task.getStatus().equals("DONE")) {
+                                    System.out.println("Эта задача выполнена. Изменение невозможно!");
+                                } else {
+                                    task.setStatus("IN PROGRESS");
+                                }
+                                break;
+                            case 2:
+                                if (task.getStatus().equals("DONE")) {
+                                    System.out.println("Эта задача уже выполнена!");
+                                } else {
+                                    task.setStatus("DONE");
+                                }
+                                break;
+                            default:
+                                System.out.println("Некорректный выбор статуса!");
+                        }
+                    } else if (epics.containsKey(id)){
+                        epic = epics.get(id);
+                        taskStatusMenu();
+                        userInput = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (userInput) {
+                            case 1:
+                                if (epic.getStatus().equals("IN PROGRESS")) {
+                                    System.out.println("Эта задача уже выполняется!");
+                                } else if (epic.getStatus().equals("DONE")) {
+                                    System.out.println("Эта задача выполнена. Изменение невозможно!");
+                                } else {
+                                    epic.setStatus("IN PROGRESS");
+                                    epic.updateAllSubtask("IN PROGRESS");
+                                }
+                                break;
+                            case 2:
+                                if (epic.getStatus().equals("DONE")) {
+                                    System.out.println("Эта задача уже выполнена!");
+                                } else {
+                                    epic.setStatus("DONE");
+                                    epic.updateAllSubtask("DONE");
+                                }
+                                break;
+                            default:
+                                System.out.println("Некорректный выбор статуса!");
+                        }
+                    } else {
+                        System.out.println("Задачи с ID " + id + " не существует!");
+                    }
+                    break;
+                case 2:
+                    break;
+                default:
+                    System.out.println("Некорректный выбор опции.");
+            }
+        }
     }
 
     public void displayAllTasks () {
@@ -126,14 +211,26 @@ public class Manager {
         }
     }
 
+
     public void displayOnlyTasks() {
         int count = 1;
 
         System.out.println(">> ОБЫЧНЫЕ ЗАДАЧИ...");
         if (!tasks.isEmpty()) {
             for (Task task : tasks.values()) {
+                switch (task.getStatus()) {
+                    case "NEW":
+                        System.out.println("-- НОВАЯ ЗАДАЧА");
+                        break;
+                    case "IN PROGRESS":
+                        System.out.println("-- В ПРОЦЕССЕ");
+                        break;
+                    case "DONE":
+                        System.out.println("-- ВЫПОЛНЕНО");
+                        break;
+                }
                 System.out.println(count + ". Задача: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание: "
-                        + task.getDescription() + ", Статус: " + task.getStatus());
+                        + task.getDescription() + ".");
                 ++count;
             }
         } else {
@@ -148,8 +245,19 @@ public class Manager {
         System.out.println(">> ЭПИК-ЗАДАЧИ...");
         if (!epics.isEmpty()) {
             for (Epic epic : epics.values()) {
+                switch (epic.getStatus()) {
+                    case "NEW":
+                        System.out.println("-- НОВАЯ ЭПИК-ЗАДАЧА");
+                        break;
+                    case "IN PROGRESS":
+                        System.out.println("-- В ПРОЦЕССЕ");
+                        break;
+                    case "DONE":
+                        System.out.println("-- ВЫПОЛНЕНО");
+                        break;
+                }
                 System.out.println(count + ". Эпик-задача: " + epic.getName() + "(ID:" + epic.getId() + ")"
-                        + ", Описание: " + epic.getDescription() + ", Статус: " + epic.getStatus());
+                        + ", Описание: " + epic.getDescription() + ".");
                 epic.displaySubtask();
                 ++count;
             }
@@ -220,5 +328,20 @@ public class Manager {
             default:
                 System.out.println("Некорректный выбор опции.");
         }
+    }
+
+    private static void subtaskCreateMenu () {
+        System.out.println("Выберите опцию из меню:");
+        System.out.println("1. Добавить подзадачу, \n2. Выход");
+    }
+
+    private static void taskUpdateMenu () {
+        System.out.println("Выберите опцию из меню:");
+        System.out.println("1. Изменить статус задачи, \n2. Выход");
+    }
+
+    private static void taskStatusMenu () {
+        System.out.println("Выберите статус для задачи:");
+        System.out.println("1. В ПРОЦЕССЕ, \n2. ВЫПОЛНЕНО");
     }
 }

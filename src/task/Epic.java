@@ -11,6 +11,11 @@ public class Epic extends Task {
         subtasks = new ArrayList<>();
     }
 
+    public ArrayList<Subtask> getSubtasks() {
+        return subtasks;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         if (!super.equals(obj)) {
@@ -37,12 +42,34 @@ public class Epic extends Task {
 
     public void displaySubtask () {
         int count = 1;
+        String status = "";
 
         for (int i = 0; i < subtasks.size(); i++) {
             var element = subtasks.get(i);
-            System.out.println("    " + count + ". Подзадача " + element.getName() + "(ID:" + element.getId() + ")"
-                    + ", Описание: " + element.getDescription() + ", Статус: " + element.getStatus());
+            switch (element.getStatus()) {
+                case "NEW":
+                    status = "-- НОВАЯ ПОДЗАДАЧА";
+                    break;
+                case "IN PROGRESS":
+                    status = "-- В ПРОЦЕССЕ";
+                    break;
+                case "DONE":
+                    status = "-- ВЫПОЛНЕНО";
+                    break;
+            }
+            System.out.println("    " + count + ". Подзадача " + element.getName() + ", Описание: "
+                    + element.getDescription() + ", Статус: " + status);
             ++count;
         }
+    }
+
+    public void updateAllSubtask (String status) {
+        Subtask subtask;
+
+        for (int i = 0; i < subtasks.size(); i++) {
+            subtask = subtasks.get(i);
+            subtask.setStatus(status);
+        }
+
     }
 }
