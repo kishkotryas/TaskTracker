@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
-    protected ArrayList <Subtask> subtasks;
+    protected ArrayList<Subtask> subtasks;
 
     public Epic(String name, String description) {
         super(name, description);
@@ -14,7 +14,6 @@ public class Epic extends Task {
     public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -30,7 +29,7 @@ public class Epic extends Task {
         return Objects.hash(super.hashCode(), subtasks);
     }
 
-    public void addSubtaskToEpic (String name, String description) {
+    public void addSubtaskToEpic(String name, String description) {
         Subtask subtask = new Subtask(name, description);
         if (subtasks.contains(subtask)) {
             System.out.println("Такая подзадача в этом эпике уже есть!");
@@ -40,7 +39,7 @@ public class Epic extends Task {
         }
     }
 
-    public void displaySubtask () {
+    public void displaySubtask() {
         int count = 1;
         String status = "";
 
@@ -63,13 +62,12 @@ public class Epic extends Task {
         }
     }
 
-    public void updateAllSubtask (String status) {
+    public void updateAllSubtask(String status) {
         Subtask subtask;
 
         for (int i = 0; i < subtasks.size(); i++) {
             subtask = subtasks.get(i);
             subtask.setStatus(status);
         }
-
     }
 }

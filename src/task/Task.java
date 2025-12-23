@@ -9,7 +9,7 @@ public class Task {
     protected int id;
     protected String status;
 
-    public Task (String name, String description) {
+    public Task(String name, String description) {
         this.status = "NEW";
         this.id = nextID++;
         this.name = name;

@@ -7,10 +7,10 @@ import java.util.Scanner;
 
 public class Manager {
     Scanner scanner = new Scanner(System.in);
-    protected HashMap <Integer, Epic> epics;
-    protected HashMap <Integer, Task> tasks;
+    protected HashMap<Integer, Epic> epics;
+    protected HashMap<Integer, Task> tasks;
 
-    public Manager () {
+    public Manager() {
         epics = new HashMap<>();
         tasks = new HashMap<>();
     }
@@ -23,7 +23,7 @@ public class Manager {
         return tasks;
     }
 
-    protected void createTask () {
+    protected void createTask() {
         int userInput;
         String taskName;
         String taskDescription;
@@ -64,7 +64,8 @@ public class Manager {
                 System.out.println("Некорректный тип задачи.");
         }
     }
-    protected void createSubtask () {
+
+    protected void createSubtask() {
         int id;
         int userInput = 0;
         String subtaskName;
@@ -105,12 +106,11 @@ public class Manager {
         }
     }
 
-    public void updateTask () {
+    public void updateTask() {
         int userInput = 0;
         int id;
         Task task;
         Epic epic;
-        Subtask subtask;
 
         while (userInput != 2) {
             displayOnlyTasks();
@@ -149,7 +149,7 @@ public class Manager {
                             default:
                                 System.out.println("Некорректный выбор статуса!");
                         }
-                    } else if (epics.containsKey(id)){
+                    } else if (epics.containsKey(id)) {
                         epic = epics.get(id);
                         taskStatusMenu();
                         userInput = scanner.nextInt();
@@ -188,7 +188,7 @@ public class Manager {
         }
     }
 
-    public void displayAllTasks () {
+    public void displayAllTasks() {
         int userInput;
 
         System.out.println("Выберите тип задач для отображения: ");
@@ -239,7 +239,7 @@ public class Manager {
         System.out.println();
     }
 
-    public void displayOnlyEpics () {
+    public void displayOnlyEpics() {
         int count = 1;
 
         System.out.println(">> ЭПИК-ЗАДАЧИ...");
@@ -267,7 +267,7 @@ public class Manager {
         System.out.println();
     }
 
-    public void deleteTasks () {
+    public void deleteTasks() {
         int id;
         int userInput;
 

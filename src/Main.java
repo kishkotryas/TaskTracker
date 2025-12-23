@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 class Main {
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         Manager manager = new Manager();
         Scanner scanner = new Scanner(System.in);
         int userInput = 0;
