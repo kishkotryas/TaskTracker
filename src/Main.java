@@ -2,12 +2,12 @@ import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-        Manager manager = new Manager();
+        TaskManager manager = new InMemoryTaskManager();
         Scanner scanner = new Scanner(System.in);
         int userInput = 0;
 
         printMenu();
-        while (userInput != 6) {
+        while (userInput != 7) {
             userInput = scanner.nextInt();
             switch (userInput) {
                 case 1:
@@ -31,6 +31,10 @@ class Main {
                     printMenu();
                     break;
                 case 6:
+                    manager.getHistory();
+                    printMenu();
+                    break;
+                case 7:
                     System.out.println("Выход из программы...");
                     break;
                 default:
@@ -42,6 +46,7 @@ class Main {
 
     private static void printMenu () {
         System.out.println("1. Создать новую задачу \n2. Создать подзадачу для эпик-задачи \n" +
-                "3. Посмотреть список задач \n4. Изменить статус задачи \n5. Удалить задачу  \n6. Выход из программы");
+                "3. Посмотреть список задач \n4. Изменить статус задачи \n5. Удалить задачу " +
+                "\n6. История просмотренных задач \n7. Выход из программы");
     }
 }

@@ -1,18 +1,20 @@
 import task.Epic;
-import task.Subtask;
 import task.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Manager {
+public class InMemoryTaskManager implements TaskManager {
     Scanner scanner = new Scanner(System.in);
     protected HashMap<Integer, Epic> epics;
     protected HashMap<Integer, Task> tasks;
+    protected ArrayList<Task> history;
 
-    public Manager() {
+    public InMemoryTaskManager() {
         epics = new HashMap<>();
         tasks = new HashMap<>();
+        history = new ArrayList<>();
     }
 
     public HashMap<Integer, Epic> getEpics() {
@@ -23,7 +25,7 @@ public class Manager {
         return tasks;
     }
 
-    protected void createTask() {
+    public void createTask() {
         int userInput;
         String taskName;
         String taskDescription;
@@ -65,7 +67,7 @@ public class Manager {
         }
     }
 
-    protected void createSubtask() {
+    public void createSubtask() {
         int id;
         int userInput = 0;
         String subtaskName;
@@ -190,9 +192,10 @@ public class Manager {
 
     public void displayAllTasks() {
         int userInput;
+        int taskID;
 
         System.out.println("Выберите тип задач для отображения: ");
-        System.out.println("1. Обычные задачи, \n2. Эпик-задачи, \n3. Все задачи");
+        System.out.println("1. Обычные задачи, \n2. Эпик-задачи, \n3. Все задачи, \n4. Просмотр задачи по ID");
         userInput = scanner.nextInt();
         switch (userInput) {
             case 1:
@@ -206,11 +209,57 @@ public class Manager {
                 displayOnlyTasks();
                 displayOnlyEpics();
                 break;
+            case 4:
+                System.out.println("Введите ID задачи для отображения:");
+                taskID = scanner.nextInt();
+                getTask(taskID);
+                break;
             default:
                 System.out.println("Некорректный тип задач!");
         }
     }
 
+    public void getTask(int id) {
+        int count = 1;
+
+        if (tasks.containsKey(id)) {
+            var task = tasks.get(id);
+            System.out.println(count + ". Задача: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание: "
+                    + task.getDescription() + ".");
+            updateHistory(task);
+        } else if (epics.containsKey(id)) {
+            var epic = epics.get(id);
+            System.out.println(count + ". Эпик-задача: " + epic.getName() + "(ID:" + epic.getId() + ")"
+                    + ", Описание: " + epic.getDescription() + ".");
+            epic.displaySubtask();
+            updateHistory(epic);
+        } else {
+            System.out.println("Задачи с ID " + id + " не существует!");
+        }
+    }
+
+    public void updateHistory(Task task) {
+        if (history.size() == 10) {
+            history.set(0, task);
+        } else {
+            history.add(task);
+        }
+    }
+
+    public void getHistory() {
+        int count = 1;
+        if (!history.isEmpty()) {
+            System.out.println("=== ИСТОРИЯ ПРОСМОТРОВ ===");
+            for (Task task : history) {
+                System.out.println(count + ". Задача: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание: "
+                        + task.getDescription() + ".");
+                ++count;
+            }
+        } else {
+            System.out.println("История просмотров пуста!");
+        }
+
+    }
 
     public void displayOnlyTasks() {
         int count = 1;
