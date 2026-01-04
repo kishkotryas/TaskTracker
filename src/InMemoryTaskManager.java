@@ -1,4 +1,5 @@
 import task.Epic;
+import task.Status;
 import task.Task;
 
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class InMemoryTaskManager implements TaskManager {
                     case 1:
                         epic = epics.get(id);
 
-                        if (epic.getStatus().equals("DONE")) {
+                        if (epic.getStatus().equals(Status.DONE)) {
                             System.out.println("Эпик-задача уже выполнена. Добавить новую подзадачу невозможно!");
                         } else {
                             System.out.println("Введите название подзадачи:");
@@ -133,19 +134,19 @@ public class InMemoryTaskManager implements TaskManager {
                         scanner.nextLine();
                         switch (userInput) {
                             case 1:
-                                if (task.getStatus().equals("IN PROGRESS")) {
+                                if (task.getStatus().equals(Status.IN_PROGRESS)) {
                                     System.out.println("Эта задача уже выполняется!");
-                                } else if (task.getStatus().equals("DONE")) {
+                                } else if (task.getStatus().equals(Status.DONE)) {
                                     System.out.println("Эта задача выполнена. Изменение невозможно!");
                                 } else {
-                                    task.setStatus("IN PROGRESS");
+                                    task.setStatus(Status.IN_PROGRESS);
                                 }
                                 break;
                             case 2:
-                                if (task.getStatus().equals("DONE")) {
+                                if (task.getStatus().equals(Status.DONE)) {
                                     System.out.println("Эта задача уже выполнена!");
                                 } else {
-                                    task.setStatus("DONE");
+                                    task.setStatus(Status.DONE);
                                 }
                                 break;
                             default:
@@ -158,21 +159,21 @@ public class InMemoryTaskManager implements TaskManager {
                         scanner.nextLine();
                         switch (userInput) {
                             case 1:
-                                if (epic.getStatus().equals("IN PROGRESS")) {
+                                if (epic.getStatus().equals(Status.IN_PROGRESS)) {
                                     System.out.println("Эта задача уже выполняется!");
-                                } else if (epic.getStatus().equals("DONE")) {
+                                } else if (epic.getStatus().equals(Status.DONE)) {
                                     System.out.println("Эта задача выполнена. Изменение невозможно!");
                                 } else {
-                                    epic.setStatus("IN PROGRESS");
-                                    epic.updateAllSubtask("IN PROGRESS");
+                                    epic.setStatus(Status.IN_PROGRESS);
+                                    epic.updateAllSubtask(Status.IN_PROGRESS);
                                 }
                                 break;
                             case 2:
-                                if (epic.getStatus().equals("DONE")) {
+                                if (epic.getStatus().equals(Status.DONE)) {
                                     System.out.println("Эта задача уже выполнена!");
                                 } else {
-                                    epic.setStatus("DONE");
-                                    epic.updateAllSubtask("DONE");
+                                    epic.setStatus(Status.DONE);
+                                    epic.updateAllSubtask(Status.DONE);
                                 }
                                 break;
                             default:
@@ -258,7 +259,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("История просмотров пуста!");
         }
-
+        System.out.println();
     }
 
     public void displayOnlyTasks() {
@@ -268,13 +269,13 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.isEmpty()) {
             for (Task task : tasks.values()) {
                 switch (task.getStatus()) {
-                    case "NEW":
+                    case Status.NEW:
                         System.out.println("-- НОВАЯ ЗАДАЧА");
                         break;
-                    case "IN PROGRESS":
+                    case Status.IN_PROGRESS:
                         System.out.println("-- В ПРОЦЕССЕ");
                         break;
-                    case "DONE":
+                    case Status.DONE:
                         System.out.println("-- ВЫПОЛНЕНО");
                         break;
                 }
@@ -295,13 +296,13 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.isEmpty()) {
             for (Epic epic : epics.values()) {
                 switch (epic.getStatus()) {
-                    case "NEW":
+                    case Status.NEW:
                         System.out.println("-- НОВАЯ ЭПИК-ЗАДАЧА");
                         break;
-                    case "IN PROGRESS":
+                    case Status.IN_PROGRESS:
                         System.out.println("-- В ПРОЦЕССЕ");
                         break;
-                    case "DONE":
+                    case Status.DONE:
                         System.out.println("-- ВЫПОЛНЕНО");
                         break;
                 }

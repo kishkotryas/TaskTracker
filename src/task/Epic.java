@@ -46,14 +46,14 @@ public class Epic extends Task {
         for (int i = 0; i < subtasks.size(); i++) {
             var element = subtasks.get(i);
             switch (element.getStatus()) {
-                case "NEW":
-                    status = "-- НОВАЯ ПОДЗАДАЧА";
+                case Status.NEW:
+                    status = Status.NEW.getName();
                     break;
-                case "IN PROGRESS":
-                    status = "-- В ПРОЦЕССЕ";
+                case Status.IN_PROGRESS:
+                    status = Status.IN_PROGRESS.getName();
                     break;
-                case "DONE":
-                    status = "-- ВЫПОЛНЕНО";
+                case Status.DONE:
+                    status = Status.DONE.getName();
                     break;
             }
             System.out.println("    " + count + ". Подзадача " + element.getName() + ", Описание: "
@@ -62,7 +62,7 @@ public class Epic extends Task {
         }
     }
 
-    public void updateAllSubtask(String status) {
+    public void updateAllSubtask(Status status) {
         Subtask subtask;
 
         for (int i = 0; i < subtasks.size(); i++) {

@@ -7,10 +7,10 @@ public class Task {
     protected String description;
     private static int nextID = 1;
     protected int id;
-    protected String status;
+    protected Status status;
 
     public Task(String name, String description) {
-        this.status = "NEW";
+        this.status = Status.NEW;
         this.id = nextID++;
         this.name = name;
         this.description = description;
@@ -28,11 +28,11 @@ public class Task {
         return description;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
