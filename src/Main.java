@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-        TaskManager manager = new InMemoryTaskManager();
+        TaskManager manager = Managers.getDefault();
         Scanner scanner = new Scanner(System.in);
         int userInput = 0;
 

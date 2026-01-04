@@ -10,22 +10,25 @@ public class InMemoryTaskManager implements TaskManager {
     Scanner scanner = new Scanner(System.in);
     protected HashMap<Integer, Epic> epics;
     protected HashMap<Integer, Task> tasks;
-    protected ArrayList<Task> history;
+    private HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         epics = new HashMap<>();
         tasks = new HashMap<>();
-        history = new ArrayList<>();
+        historyManager = Managers.getDefaultHistory();
     }
 
+    @Override
     public HashMap<Integer, Epic> getEpics() {
         return epics;
     }
 
+    @Override
     public HashMap<Integer, Task> getTasks() {
         return tasks;
     }
 
+    @Override
     public void createTask() {
         int userInput;
         String taskName;
@@ -68,6 +71,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public void createSubtask() {
         int id;
         int userInput = 0;
@@ -109,6 +113,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public void updateTask() {
         int userInput = 0;
         int id;
@@ -191,6 +196,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public void displayAllTasks() {
         int userInput;
         int taskID;
@@ -220,6 +226,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public void getTask(int id) {
         int count = 1;
 
@@ -227,41 +234,19 @@ public class InMemoryTaskManager implements TaskManager {
             var task = tasks.get(id);
             System.out.println(count + ". Задача: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание: "
                     + task.getDescription() + ".");
-            updateHistory(task);
+            historyManager.add(task);
         } else if (epics.containsKey(id)) {
             var epic = epics.get(id);
             System.out.println(count + ". Эпик-задача: " + epic.getName() + "(ID:" + epic.getId() + ")"
                     + ", Описание: " + epic.getDescription() + ".");
             epic.displaySubtask();
-            updateHistory(epic);
+            historyManager.add(epic);
         } else {
             System.out.println("Задачи с ID " + id + " не существует!");
         }
     }
 
-    public void updateHistory(Task task) {
-        if (history.size() == 10) {
-            history.set(0, task);
-        } else {
-            history.add(task);
-        }
-    }
-
-    public void getHistory() {
-        int count = 1;
-        if (!history.isEmpty()) {
-            System.out.println("=== ИСТОРИЯ ПРОСМОТРОВ ===");
-            for (Task task : history) {
-                System.out.println(count + ". Задача: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание: "
-                        + task.getDescription() + ".");
-                ++count;
-            }
-        } else {
-            System.out.println("История просмотров пуста!");
-        }
-        System.out.println();
-    }
-
+    @Override
     public void displayOnlyTasks() {
         int count = 1;
 
@@ -289,6 +274,7 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println();
     }
 
+    @Override
     public void displayOnlyEpics() {
         int count = 1;
 
@@ -317,6 +303,25 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println();
     }
 
+    @Override
+    public void getHistory() {
+        int count = 1;
+        var history = historyManager.getHistory();
+
+        if (!history.isEmpty()) {
+            System.out.println("=== ИСТОРИЯ ПРОСМОТРОВ ===");
+            for (Task task : history) {
+                System.out.println(count + ". Задача: " + task.getName() + "(ID:" + task.getId() + ")" + ", Описание: "
+                        + task.getDescription() + ".");
+                ++count;
+            }
+        } else {
+            System.out.println("История просмотров пуста!");
+        }
+        System.out.println();
+    }
+
+    @Override
     public void deleteTasks() {
         int id;
         int userInput;

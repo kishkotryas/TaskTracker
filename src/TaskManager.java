@@ -13,7 +13,6 @@ public interface TaskManager {
     void displayOnlyTasks();
     void displayOnlyEpics();
     void deleteTasks();
-    void updateHistory(Task task);
     void getTask(int id);
     void getHistory();
 }
